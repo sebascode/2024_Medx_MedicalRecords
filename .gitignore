@@ -141,3 +141,5 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vscode
+src-tauri/gen/
+src-tauri/target/
