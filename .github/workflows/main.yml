@@ -30,7 +30,7 @@ jobs:
 
       - name: Get version
         run: |
-          echo "export PACKAGE_VERSION=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
+          PACKAGE_VERSION=$(node -p -e "require('./package.json').version") >> $GITHUB_ENV
 
       - name: Create release
         id: create-release
