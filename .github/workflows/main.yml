@@ -117,3 +117,13 @@ jobs:
               draft: false,
               prerelease: false
             })
+      - name: Delete release if build failed
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.repos.deleteRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: process.env.release_id
+            })
