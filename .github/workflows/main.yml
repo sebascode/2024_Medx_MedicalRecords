@@ -59,13 +59,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-
 
-      - name: Install gdk-3.0 on Linux
+      - name: Install gdk-3.0 and libsoup-3.0 on Linux
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libsoup3.0
 
-      - name: Install gdk-3.0 on macOS
+      - name: Install gdk-3.0 and libsoup-3.0 on macOS
         if: matrix.os == 'macos-latest'
-        run: brew install gtk+3
+        run: brew install gtk+3 libsoup
 
       - name: Build Tauri app
         run: pnpm tauri build
