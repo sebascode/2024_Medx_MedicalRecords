@@ -65,7 +65,7 @@ jobs:
 
       - name: Install gdk-3.0 and libsoup-3.0 on macOS
         if: matrix.os == 'macos-latest'
-        run: brew install gtk+3 libsoup javascriptcoregtk-4.1
+        run: brew install gtk+3 libsoup
 
       - name: Build Tauri app
         run: pnpm tauri build
