@@ -24,7 +24,7 @@
     "lucide-svelte": "^0.394.0",
     "mode-watcher": "^0.3.0",
     "tailwind-merge": "^2.3.0",
-    "tailwind-variants": "^0.2.1",
+    "tailwind-variants": "^0.2.1"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.1",
