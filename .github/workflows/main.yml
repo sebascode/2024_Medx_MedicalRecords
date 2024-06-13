@@ -16,6 +16,9 @@ jobs:
     outputs:
       release_id: ${{ steps.create-release.outputs.result }}
 
+    env:
+      VERSION: ${{ github.ref_name }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -115,7 +118,9 @@ jobs:
               repo: context.repo.repo,
               release_id: process.env.release_id,
               draft: false,
-              prerelease: false
+              prerelease: false,
+              tag_name: `v${process.env.VERSION}`,
+              release_name: `v${process.env.VERSION}`
             })
       - name: Delete release if build failed
         if: failure()
