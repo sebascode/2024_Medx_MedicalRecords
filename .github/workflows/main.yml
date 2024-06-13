@@ -32,18 +32,18 @@ jobs:
 
       - name: Install Sveltekit
         run: |
-          npm install -g @sveltejs/adapter-static
+          pnpm install -g @sveltejs/adapter-static
 
       - name: Install Tauri CLI
         run: |
-          npm install -g @tauri-apps/cli
-          npm install -g @tauri-apps/api
+          pnpm install -g @tauri-apps/cli
+          pnpm install -g @tauri-apps/api
 
       - name: Install project dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Build Tauri app
-        run: npm run tauri build
+        run: pnpm tauri build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
