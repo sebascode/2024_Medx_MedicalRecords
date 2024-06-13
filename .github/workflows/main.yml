@@ -79,7 +79,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: tauri-app-${{ runner.os }}
+          name: tauri-app
           path: src-tauri/target/release/bundle/
 
   release:
@@ -92,7 +92,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-          name: tauri-app-${{ runner.os }}
+          name: tauri-app
           path: ./release
 
       - name: Get version from package.json
