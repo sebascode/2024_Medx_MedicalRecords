@@ -82,12 +82,17 @@ jobs:
           path: src-tauri/target/release/bundle/
 
   release:
-    permissions: write-all
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: tauri-app-*
+          path: ./release
 
       - name: Get version from package.json
         id: get_version
@@ -105,36 +110,26 @@ jobs:
             Release of version ${{ env.VERSION }}.
           draft: false
           prerelease: false
+      - name: Commit and push artifacts
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git checkout -b release-artifact
+          mkdir -p artifacts
+          mv ./release/* artifacts/
+          git add artifacts/
+          git commit -m "[Auto Add artifacts"
+          git push origin release-artifact --force
 
-      - name: Upload Linux asset
-        if: matrix.os == 'ubuntu-latest'
-        uses: actions/upload-release-asset@v1
+      - name: Create Release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: src-tauri/target/release/bundle/*
-          asset_name: tauri-app-linux.zip
-          asset_content_type: application/zip
-
-      - name: Upload macOS asset
-        if: matrix.os == 'macos-latest'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: src-tauri/target/release/bundle/*
-          asset_name: tauri-app-macos.zip
-          asset_content_type: application/zip
-
-      - name: Upload Windows asset
-        if: matrix.os == 'windows-latest'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: src-tauri/target/release/bundle/*
-          asset_name: tauri-app-windows.zip
-          asset_content_type: application/zip
+          tag_name: med_ex-${{ env.VERSION }}
+          release_name: "Release ${{ env.VERSION }}"
+          body: |
+            Release of version ${{ env.VERSION }}.
+          draft: false
+          prerelease: false
+          files: ./artifacts/*
