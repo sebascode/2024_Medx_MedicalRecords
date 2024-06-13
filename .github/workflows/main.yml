@@ -92,7 +92,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
-          name: tauri-app-*
+          name: tauri-app-${{ runner.os }}
           path: ./release
 
       - name: Get version from package.json
