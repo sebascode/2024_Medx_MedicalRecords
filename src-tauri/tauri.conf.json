@@ -1,7 +1,7 @@
 {
   "productName": "medx-medical_records",
   "version": "0.0.0",
-  "identifier": "app_medx_medical_records",
+  "identifier": "com.scode.medx",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
