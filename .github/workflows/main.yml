@@ -16,7 +16,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
+        #os: [windows-latest, macos-latest]
+        os: [macos-latest]
 
     env:
       VERSION: ${{ github.sha }}
