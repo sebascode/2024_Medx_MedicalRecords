@@ -1,4 +1,4 @@
-name: Build Tauri App
+name: Build and Publish Tauri App
 
 on:
   push:
@@ -7,74 +7,38 @@ on:
   pull_request:
     branches:
       - main
-permissions:
-  contents: read
-  packages: write
-  issues: write
-jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        #os: [windows-latest, macos-latest]
-        os: [macos-latest]
 
-    env:
-      VERSION: ${{ github.sha }}
+jobs:
+  build-windows:
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "18"
+          node-version: '22'
+          
+      - name: Install Rust
+        run: |
+          rustup install stable
+          rustup default stable
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install Sveltekit
+        run: |
+          npm install -g @sveltejs/adapter-static
 
       - name: Install Tauri CLI
-        run: pnpm add -g @tauri-apps/cli
+        run: |
+          npm install -g @tauri-apps/cli
+          npm install -g @tauri-apps/api
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          profile: minimal
-          override: true
-
-      - name: Cache Rust toolchain
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.cargo/bin
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
-
-      - name: Cache pnpm store
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Install gdk-3.0 and libsoup-3.0 on Linux
-        if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libsoup3.0 javascriptcoregtk-4.1
-
-      - name: Install gdk-3.0 and libsoup-3.0 on macOS
-        if: matrix.os == 'macos-latest'
-        run: brew install gtk+3 libsoup
+      - name: Install project dependencies
+        run: npm install
 
       - name: Build Tauri app
-        run: pnpm tauri build
+        run: npm run tauri build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -82,9 +46,9 @@ jobs:
           name: tauri-app
           path: src-tauri/target/release/bundle/
 
-  release:
+  publish:
+    needs: build-windows
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -95,31 +59,15 @@ jobs:
           name: tauri-app
           path: ./release
 
-      - name: Get version from package.json
-        id: get_version
-        run: echo "VERSION=$(jq -r '.version' < package.json)" >> $GITHUB_ENV
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: med-ex-${{ env.VERSION }}
-          release_name: "Release ${{ env.VERSION }}"
-          body: |
-            Release of version ${{ env.VERSION }}.
-          draft: false
-          prerelease: false
-      - name: Commit and push artifacts
+      - name: Commit and push artifact
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b release-artifact
           mkdir -p artifacts
           mv ./release/* artifacts/
           git add artifacts/
-          git commit -m "[Auto Add artifacts"
+          git commit -m "Auto: Add build artifact"
           git push origin release-artifact --force
 
       - name: Create Release
@@ -127,10 +75,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: med_ex-${{ env.VERSION }}
-          release_name: "Release ${{ env.VERSION }}"
-          body: |
-            Release of version ${{ env.VERSION }}.
+          tag_name: 'release-${{ github.sha }}'
+          release_name: 'Release ${{ github.sha }}'
           draft: false
           prerelease: false
           files: ./artifacts/*
