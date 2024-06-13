@@ -1,4 +1,4 @@
 import { writable } from "svelte/store";
-import { Paciente } from "$lib/types/paciente";
+import { Paciente } from "$lib/types/Paciente";
 
 export const currentPaciente = writable(new Paciente());
