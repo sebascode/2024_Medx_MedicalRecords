@@ -17,11 +17,12 @@
     const init = async () => {
         Object.getOwnPropertyNames(new Paciente()).forEach((field) => {
             if (
-                !field.includes("id") &&
-                !field.includes("_at") &&
-                !field.includes("edad")
-            )
+                !(field == "id") &&
+                !(field == "_edad") &&
+                !field.includes("_at")
+            ) {
                 formSchema.push(field);
+            }
         });
     };
 

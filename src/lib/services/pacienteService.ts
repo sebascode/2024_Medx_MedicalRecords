@@ -9,7 +9,7 @@ export function getPatientById(db: Database, id: number) {
   return db.select<Paciente>("SELECT * FROM Paciente WHERE id = ?", [id]);
 }
 export function getPatientByRut(db: Database, rut: string) {
-  return db.select<Paciente>("SELECT * FROM Paciente WHERE rut = ?", [id]);
+  return db.select<Paciente>("SELECT * FROM Paciente WHERE rut = ?", [rut]);
 }
 export function getLikePatientByRut(db: Database, rut: string) {
   return db.select<Array<Paciente>>("SELECT * FROM Paciente WHERE rut LIKE ?", [

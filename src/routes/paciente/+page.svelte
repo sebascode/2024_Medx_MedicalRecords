@@ -19,9 +19,7 @@
             );
             getAllPatients(db).then((result) => {
                 patients = [];
-                console.log({ result });
                 result.forEach((p: IPaciente) => {
-                    console.log({ p });
                     patients.push(new Paciente(p));
                 });
             });
