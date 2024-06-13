@@ -60,7 +60,7 @@ jobs:
             ${{ runner.os }}-pnpm-
 
       - name: Build Tauri app
-        run: pnpm run tauri build
+        run: pnpm tauri build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
