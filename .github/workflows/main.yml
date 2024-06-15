@@ -28,7 +28,6 @@ jobs:
             echo 'PACKAGE_VERSION<<EOF' >> $GITHUB_ENV
             cat ./package.json >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
-            return "${{ fromJson(env.PACKAGE_VERSION).version }}"
 
       - name: Set Raw Version
         id: raw-version
