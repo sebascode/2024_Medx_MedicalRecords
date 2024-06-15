@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       release_id: ${{ steps.create-release.outputs.result }}
-
+      tag_version: ${{ steps.raw-version.outputs.result }}
+      full_version: ${{ steps.set-version.outputs.result }}
     env:
       VERSION: ${{ github.ref_name }}
 
@@ -126,6 +127,8 @@ jobs:
         uses: actions/github-script@v6
         env:
           release_id: ${{ needs.create-release.outputs.release_id }}
+          tag_version: ${{ needs.create-release.output.tag_version }}
+          full_version: ${{ needs.create-release.output.full_version }}
         with:
           script: |
             github.rest.repos.updateRelease({
@@ -134,8 +137,8 @@ jobs:
               release_id: process.env.release_id,
               draft: false,
               prerelease: false,
-              tag_name: `v${process.env.VERSION}`,
-              release_name: `v${process.env.VERSION}`
+              tag_name: `v${process.env.tag_version}`,
+              release_name: `v${process.env.full_version}`
             })
       - name: Delete release if build failed
         if: failure()
