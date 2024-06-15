@@ -31,20 +31,15 @@ jobs:
           echo env.PACKAGE_VERSION
           
       - name: Print Version
-        run: |
-          echo 'APP_VERSION = ${{ fromJson(env.PACKAGE_VERSION).version }} >> $GITHUB_ENV'
-          echo ${{APP_VERSION}}
+        id: set-version
+        with: 
+          script: |
+            echo 'APP_VERSION = ${{ fromJson(env.PACKAGE_VERSION).version }} >> $GITHUB_ENV'
+            return "${{APP_VERSION}}"
+          result-encoding: string
 
-          const data {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: `v${process.env.APP_VERSION}`,
-              name: `v${process.env.APP_VERSION}`,
-              body: '*This release was generated automatically using GitHub Actions.*',
-              draft: true,
-              prerelease: false
-            };
-          echo ${{ data }}
+      - name: Confirm Data
+        run: echo "${{ steps.set-version.outputs.result }}"
 
       - name: Create release
         id: create-release
@@ -54,8 +49,8 @@ jobs:
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `v${process.env.APP_VERSION}`,
-              name: `v${process.env.APP_VERSION}`,
+              tag_name: `v${{steps.set-version.outputs.result}}`,
+              name: `v${{steps.set-version.outputs.result}}`,
               body: '*This release was generated automatically using GitHub Actions.*',
               draft: true,
               prerelease: false
