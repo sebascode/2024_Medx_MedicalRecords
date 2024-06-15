@@ -34,9 +34,7 @@ jobs:
         uses: actions/github-script@v7
         id: set-version
         with: 
-          script: |
-            echo 'APP_VERSION = ${{ fromJson(env.PACKAGE_VERSION).version }} >> $GITHUB_ENV'
-            return "${{APP_VERSION}}"
+          script: return "${{ fromJson(env.PACKAGE_VERSION).version }}"
           result-encoding: string
 
       - name: Confirm Data
