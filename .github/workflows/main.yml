@@ -27,7 +27,7 @@ jobs:
           cat ./package.json >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - run: |
-          echo '${{ fromJson(env.PACKAGE_JSON).version }}'
+          echo '${{ fromJson(process.env.PACKAGE_JSON).version }}'
 
       - name: Create release
         id: create-release
