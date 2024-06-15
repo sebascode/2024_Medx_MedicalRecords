@@ -33,6 +33,7 @@ jobs:
       - name: Print Version
         run: |
           echo 'APP_VERSION = ${{ fromJson(env.PACKAGE_VERSION).version }} >> $GITHUB_ENV'
+          echo $APP_VERSION
 
       - name: Create release
         id: create-release
