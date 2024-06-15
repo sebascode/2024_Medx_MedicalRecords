@@ -24,17 +24,21 @@ jobs:
         uses: actions/checkout@v3
         
       - name: Check Version
-        run: |
-          echo 'PACKAGE_VERSION<<EOF' >> $GITHUB_ENV
-          cat ./package.json >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          echo env.PACKAGE_VERSION
+        id: raw-version
+        uses: actions/github-script@v7
+        with:
+          script: |
+            echo 'PACKAGE_VERSION<<EOF' >> $GITHUB_ENV
+            cat ./package.json >> $GITHUB_ENV
+            echo 'EOF' >> $GITHUB_ENV
+            return "${{ fromJson(env.PACKAGE_VERSION).version }}"
+          result-encoding: string
 
       - name: Set Date
         run: |
           echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
           
-      - name: Print Version
+      - name: Print Version Complete
         uses: actions/github-script@v7
         id: set-version
         with: 
@@ -52,7 +56,7 @@ jobs:
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `v${{steps.set-version.outputs.result}}`,
+              tag_name: `v${{steps.raw-version.outputs.result}}`,
               name: `v${{steps.set-version.outputs.result}}`,
               body: '*This release was generated automatically using GitHub Actions.*',
               draft: true,
