@@ -43,7 +43,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               tag_name: `v${process.env.PACKAGE_VERSION}`,
-              name: `v${fromJson(process.env.PACKAGE_JSON).version}`,
+              name: `v${fromJson(env.PACKAGE_JSON).version}`,
               body: '*This release was generated automatically using GitHub Actions.*',
               draft: true,
               prerelease: false
