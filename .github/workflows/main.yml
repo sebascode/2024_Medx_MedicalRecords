@@ -34,11 +34,11 @@ jobs:
         uses: actions/github-script@v7
         id: set-version
         with: 
-          script: return "${{ fromJson(env.PACKAGE_VERSION).version }}"
+          script: return "${{ fromJson(env.PACKAGE_VERSION).version }}.${{github.run_number}}"
           result-encoding: string
 
       - name: Confirm Data
-        run: echo "${{ steps.set-version.outputs.result }}.${{github.run_number}}"
+        run: echo "${{ steps.set-version.outputs.result }}"
 
       - name: Create release
         id: create-release
