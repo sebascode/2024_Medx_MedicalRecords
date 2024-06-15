@@ -33,11 +33,22 @@ jobs:
       - name: Print Version
         run: |
           echo 'APP_VERSION = ${{ fromJson(env.PACKAGE_VERSION).version }} >> $GITHUB_ENV'
-          echo $APP_VERSION
+          echo ${{APP_VERSION}}
+
+          const data {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `v${process.env.APP_VERSION}`,
+              name: `v${process.env.APP_VERSION}`,
+              body: '*This release was generated automatically using GitHub Actions.*',
+              draft: true,
+              prerelease: false
+            };
+          echo ${{ data }}
 
       - name: Create release
         id: create-release
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const { data } = await github.rest.repos.createRelease({
