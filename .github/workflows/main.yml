@@ -27,7 +27,7 @@ jobs:
           cat ./package.json >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - run: |
-          echo '${{ fromJson(env.PACKAGE_VERSION).version }}'
+          echo '${{ fromJson(process.env.PACKAGE_VERSION).version }}'
 
       - name: Create release
         id: create-release
@@ -37,8 +37,8 @@ jobs:
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `v${env.PACKAGE_VERSION}`,
-              name: `v${fromJson(env.PACKAGE_JSON).version}`,
+              tag_name: `v${process.env.PACKAGE_VERSION}`,
+              name: `v${fromJson(process.env.PACKAGE_JSON).version}`,
               body: '*This release was generated automatically using GitHub Actions.*',
               draft: true,
               prerelease: false
