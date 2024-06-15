@@ -38,7 +38,7 @@ jobs:
           result-encoding: string
 
       - name: Confirm Data
-        run: echo "${{ steps.set-version.outputs.result }}"
+        run: echo "${{ steps.set-version.outputs.result }}.${{github.run_number}}"
 
       - name: Create release
         id: create-release
