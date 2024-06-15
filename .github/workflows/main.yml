@@ -29,12 +29,16 @@ jobs:
           cat ./package.json >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
           echo env.PACKAGE_VERSION
+
+      - name: Set Date
+        run: |
+          echo "RELEASE_DATE=$(date --rfc-3339=date)" >> ${GITHUB_ENV}
           
       - name: Print Version
         uses: actions/github-script@v7
         id: set-version
         with: 
-          script: return "${{ fromJson(env.PACKAGE_VERSION).version }}.${{github.run_number}}"
+          script: return "${{ fromJson(env.PACKAGE_VERSION).version }}.${{ env.RELEASE_DATE }}.${{github.run_number}}"
           result-encoding: string
 
       - name: Confirm Data
