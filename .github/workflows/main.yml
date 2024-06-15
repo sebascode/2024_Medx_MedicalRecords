@@ -32,7 +32,7 @@ jobs:
           
       - name: Print Version
         run: |
-          echo '${{ fromJson(env.PACKAGE_VERSION).version }}'
+          echo 'APP_VERSION = ${{ fromJson(env.PACKAGE_VERSION).version }} >> $GITHUB_ENV'
 
       - name: Create release
         id: create-release
@@ -42,8 +42,8 @@ jobs:
             const { data } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `v${{ fromJson(env.PACKAGE_JSON).version }}`,
-              name: `v${{ fromJson(env.PACKAGE_JSON).version }}`,
+              tag_name: `v${env.APP_VERSION)`,
+              name: `v${env.APP_VERSION)`,
               body: '*This release was generated automatically using GitHub Actions.*',
               draft: true,
               prerelease: false
