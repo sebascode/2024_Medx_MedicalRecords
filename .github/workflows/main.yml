@@ -22,13 +22,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - run: |
+        
+      - name: Check Version
+        run: |
           echo 'PACKAGE_VERSION<<EOF' >> $GITHUB_ENV
           cat ./package.json >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
           echo env.PACKAGE_VERSION
-      - run: |
-          echo '${{ fromJson(process.env.PACKAGE_VERSION).version }}'
+          
+      - name: Print Version
+        run: |
+          echo '${{ fromJson(env.PACKAGE_VERSION).version }}'
 
       - name: Create release
         id: create-release
