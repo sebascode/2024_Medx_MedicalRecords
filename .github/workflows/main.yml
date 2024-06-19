@@ -78,6 +78,7 @@ jobs:
           tag_version: ${{ needs.create-release.output.tag_version }}
           full_version: ${{ needs.create-release.output.full_version }}
         run: |
+            echo `release: $RELEASE_DATE`
             echo `simple: v$env.tag_version`;
             echo `doble: v${{env.tag_version}}`;
             echo `circle: v$(env.tag_version)`;
