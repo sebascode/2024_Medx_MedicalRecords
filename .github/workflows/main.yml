@@ -67,6 +67,23 @@ jobs:
             })
             return data.id
 
+  verify-data:
+    needs: create-release
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Verify Data
+        id: check-variables
+        uses: actions/github-script@v7
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
+          tag_version: ${{ needs.create-release.output.tag_version }}
+          full_version: ${{ needs.create-release.output.full_version }}
+        with:
+          script: |
+            echo `simple: v${process.env.tag_version}`
+            echo `double: v${{process.env.tag_version}}`
+            echo `circle: v$(env.tag_version)`
+            
   build-tauri:
     needs: create-release
     permissions:
@@ -122,20 +139,6 @@ jobs:
     needs: [create-release, build-tauri]
 
     steps:
-      - name: Publish release
-        id: check-variables
-        uses: actions/github-script@v7
-        env:
-          release_id: ${{ needs.create-release.outputs.release_id }}
-          tag_version: ${{ needs.create-release.output.tag_version }}
-          full_version: ${{ needs.create-release.output.full_version }}
-        with:
-          script: |
-            echo `simple: v${process.env.tag_version}`
-            echo `double: v${{process.env.tag_version}}`
-            echo `circle: v$(env.tag_version)`
-            
-        
       - name: Publish release
         id: publish-release
         uses: actions/github-script@v7
