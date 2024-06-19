@@ -80,8 +80,8 @@ jobs:
           full_version: ${{ needs.create-release.output.full_version }}
         with:
           script: |
-            echo `simple: v${process.env.tag_version}`
-            echo `double: v${{process.env.tag_version}}`
+            echo `simple: v${env.tag_version}`
+            echo `double: v${{env.tag_version}}`
             echo `circle: v$(env.tag_version)`
             
   build-tauri:
