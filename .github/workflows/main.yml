@@ -155,8 +155,15 @@ jobs:
               tag_name: `v${{env.tag_version}}`,
               release_name: `v${{env.full_version}}`
             })
+            
+  delete-release-on-fail:
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    needs: [create-release]
+    if: failure()
+    steps:
       - name: Delete release if build failed
-        if: failure()
         uses: actions/github-script@v7
         with:
           script: |
