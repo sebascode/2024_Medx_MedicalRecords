@@ -75,13 +75,13 @@ jobs:
         id: check-variables
         env:
           release_id: ${{ needs.create-release.outputs.release_id }}
-          tag_version: ${{ needs.create-release.output.tag_version }}
-          full_version: ${{ needs.create-release.output.full_version }}
+          tag_version: ${{ needs.create-release.outputs.tag_version }}
+          full_version: ${{ needs.create-release.outputs.full_version }}
         run: |
-            echo `release: $RELEASE_DATE`
-            echo `simple: v$env.tag_version`;
-            echo `doble: v${{env.tag_version}}`;
-            echo `circle: v$(env.tag_version)`;
+            echo "release: $RELEASE_DATE";
+            echo "simple: v$env.tag_version";
+            echo "doble: v${{env.tag_version}}";
+            echo "circle: v$(env.tag_version)";
             
   build-tauri:
     needs: create-release
@@ -143,8 +143,8 @@ jobs:
         uses: actions/github-script@v7
         env:
           release_id: ${{ needs.create-release.outputs.release_id }}
-          tag_version: ${{ needs.create-release.output.tag_version }}
-          full_version: ${{ needs.create-release.output.full_version }}
+          tag_version: ${{ needs.create-release.outputs.tag_version }}
+          full_version: ${{ needs.create-release.outputs.full_version }}
         with:
           script: |
             github.rest.repos.updateRelease({
