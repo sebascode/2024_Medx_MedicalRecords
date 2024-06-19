@@ -78,10 +78,9 @@ jobs:
           tag_version: ${{ needs.create-release.outputs.tag_version }}
           full_version: ${{ needs.create-release.outputs.full_version }}
         run: |
-            echo "release: $RELEASE_DATE";
-            echo "simple: v$env.tag_version";
-            echo "doble: v${{env.tag_version}}";
-            echo "circle: v$(env.tag_version)";
+            echo "release_id: v${{env.release_id}}";
+            echo "tag_version: v${{env.tag_version}}";
+            echo "full_version: v${{env.full_version}}";
             
   build-tauri:
     needs: create-release
@@ -153,8 +152,8 @@ jobs:
               release_id: process.env.release_id,
               draft: false,
               prerelease: false,
-              tag_name: `v$(process.env.tag_version)`,
-              release_name: `v$(process.env.full_version)`
+              tag_name: "v${{process.env.tag_version}}",
+              release_name: "v${{process.env.full_version}}"
             })
       - name: Delete release if build failed
         if: failure()
