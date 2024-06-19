@@ -137,8 +137,8 @@ jobs:
               release_id: process.env.release_id,
               draft: false,
               prerelease: false,
-              tag_name: `v${process.env.tag_version}`,
-              release_name: `v${process.env.full_version}`
+              tag_name: `v$(process.env.tag_version)`,
+              release_name: `v$(process.env.full_version)`
             })
       - name: Delete release if build failed
         if: failure()
