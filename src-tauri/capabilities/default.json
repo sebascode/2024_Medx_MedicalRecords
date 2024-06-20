@@ -21,6 +21,10 @@
     "dialog:allow-save",
     "dialog:allow-open",
     "dialog:allow-confirm",
-    "dialog:allow-message"
+    "dialog:allow-message",
+    "updater:allow-check",
+    "updater:allow-install",
+    "updater:allow-download",
+    "updater:allow-download-and-install"
   ]
 }

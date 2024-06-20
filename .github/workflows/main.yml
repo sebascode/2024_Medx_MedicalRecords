@@ -89,7 +89,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [windows-latest, macos-latest]
+        #platform: [windows-latest, macos-latest]
+        platform: [macos-latest]
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -127,6 +128,8 @@ jobs:
         uses: tauri-apps/tauri-action@dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.PK_RELEASE }}
+          TAURI_SIGNING_PRIVATE_KEY_SECRET: "ChangeMe"
         with:
           releaseId: ${{ needs.create-release.outputs.release_id }}
 

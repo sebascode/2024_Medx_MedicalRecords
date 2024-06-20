@@ -8,13 +8,14 @@
     "beforeBuildCommand": "pnpm build",
     "frontendDist": "../build"
   },
-  "updater": {
-    "active": true,
-    "endpoints": [
-      "https://gist.githubusercontent.com/sebascode/fbccc6afca03e7ab1c0f7548c79179a5/raw/medx_release.json"
-    ],
-    "dialog": true,
-    "pubkey": "YOUR_UPDATER_SIGNATURE_PUBKEY_HERE"
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://gist.githubusercontent.com/sebascode/fbccc6afca03e7ab1c0f7548c79179a5/raw/medx_release.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDVDOTEyNzZCRkYzNjc1OUMKUldTY2RUYi9heWVSWEZ0UGYyNEdGREpoRmF3OHBLMDRSMDZibU1NbGJkVUIxZC9SWlZnYk9yc2cK",
+      "dialog": true
+    }
   },
   "app": {
     "windows": [

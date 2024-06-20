@@ -1,6 +1,8 @@
 <script lang="ts">
     import { invoke } from "@tauri-apps/api/core";
     import Database from "@tauri-apps/plugin-sql";
+    import { check } from "@tauri-apps/plugin-updater";
+    import { relaunch } from "@tauri-apps/plugin-process";
 
     let name = "";
     let greetMsg = "";
@@ -9,11 +11,19 @@
         // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
         greetMsg = await invoke("greet", { name });
     }
-    async function dbInit() {
+    async function Init() {
+        console.log("check update");
+        const update = await check();
+        console.log({ update });
+        if (update?.available) {
+            await update.downloadAndInstall();
+            await relaunch();
+        }
+
         console.log("db init");
         const db: Database = await Database.load("sqlite:medx_collection.db");
     }
-    dbInit();
+    Init();
 </script>
 
 <div class="container">

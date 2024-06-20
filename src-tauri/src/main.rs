@@ -11,6 +11,13 @@ use tauri_plugin_sql::{Migration, MigrationKind};
 
 fn main() {
     tauri::Builder::default()
+        .setup(|app| {
+            #[cfg(desktop)]
+            app.handle()
+                .plugin(tauri_plugin_updater::Builder::new().build())?;
+            Ok(())
+        })
+        .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_fs::init())
