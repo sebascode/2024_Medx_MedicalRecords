@@ -172,6 +172,9 @@ jobs:
     runs-on: ubuntu-20.04
     needs: [publish-release]
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Download latest file
         id: json_file
         uses: robinraju/release-downloader@v1.10
