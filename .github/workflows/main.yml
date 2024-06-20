@@ -89,8 +89,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        #platform: [windows-latest, macos-latest]
-        platform: [macos-latest]
+        include:
+          - platform: "macos-latest" # for Arm based macs (M1 and above).
+            args: "--target aarch64-apple-darwin"
+          - platform: "macos-latest" # for Intel based macs.
+            args: "--target x86_64-apple-darwin"
+          - platform: "windows-latest"
+            args: ""
+          - platform: "windows-latest"
+            args: "--target i686-pc-windows-msvc"
     environment: Release
     runs-on: ${{ matrix.platform }}
     steps:
@@ -158,6 +165,46 @@ jobs:
               tag_name: `v${{env.tag_version}}`,
               release_name: `v${{env.full_version}}`
             })
+
+  publish-gist:
+    if: false
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    needs: [publish-release]
+    steps:
+      - name: Get File
+        id: get_file
+        run: |
+          FILE_CONTENT<<EOF
+          {
+            "version": "0.5.1",
+            "notes": "",
+            "pub_date": "2024-06-20T08:10:26.882Z",
+            "platforms": {
+              "darwin-aarch64": {
+                "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTY2RUYi9heWVSWEFuVzhYQnZEME0yT3pTcG9GK1ZNZnc5Y0RIYmhLMndXblhRNlg0bVNIMStkbFA3SmhWejYwRkJSTDdvL0JKM2lMTWw0UHNBOE5sTFBYT3NWL1hlRkEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzE4ODcxMDIyCWZpbGU6bWVkeC1tZWRpY2FsX3JlY29yZHMuYXBwLnRhci5nego0bStjMzFwSlJrK2ZiTmNjc2xuM3Npc2x6U1BDNTJoNWNlUFZxYlVnVU4rZXZqK0hrQyszL3MxZVAybDk0eWVJVG9mMjdEcWEwOG1MSlRqU0xUSXlBdz09Cg==",
+                "url": "https://github.com/sebascode/2024_Medx_MedicalRecords/releases/latest/download/medx-medical_records_aarch64.app.tar.gz"
+              }
+            }
+          }
+          EOF
+
+          echo "::set-output name=json_content::$FILE_CONTENT"
+          echo "File content: $FILE_CONTENT"
+
+      - name: Update gist
+        uses: gorgbus/gist-actions@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIST_SECRET }}
+          GIST_ID: ${{ vars.GIST_ID }}
+          GIST_FILENAME: ${{ vars.GIST_FILENAME }}
+          JSON_CONTENT: ${{ steps.get_file.outputs.json_content }}
+        with:
+          action: "update"
+          gist_id: ${{ env.GIST_ID }}
+          file_name: ${{ env.GIST_FILENAME }}
+          content: ${{ steps.get_file.outputs.content }}
 
   delete-release-on-fail:
     permissions:
