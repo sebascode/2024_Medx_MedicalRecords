@@ -171,6 +171,7 @@ jobs:
       contents: write
     runs-on: ubuntu-20.04
     needs: [publish-release]
+    environment: Release
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
