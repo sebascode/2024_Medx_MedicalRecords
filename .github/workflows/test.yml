@@ -23,8 +23,8 @@ jobs:
           GIST_FILENAME: ${{ vars.GIST_FILENAME }}
         with:
           action: "get"
-          gist_id: $GIST_ID
-          file_name: $GIST_FILENAME
+          gist_id: ${{ env.GIST_ID }}
+          file_name: ${{ env.GIST_FILENAME }}
 
       - name: Change content
         id: new_gist
