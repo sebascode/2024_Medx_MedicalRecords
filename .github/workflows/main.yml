@@ -93,11 +93,11 @@ jobs:
           - platform: "macos-latest" # for Arm based macs (M1 and above).
             args: "--target aarch64-apple-darwin"
           #- platform: "macos-latest" # for Intel based macs.
-            #args: "--target x86_64-apple-darwin"
-          #- platform: "windows-latest"
-            #args: ""
+          #args: "--target x86_64-apple-darwin"
           - platform: "windows-latest"
-            args: "--target i686-pc-windows-msvc"
+            args: ""
+          #- platform: "windows-latest"
+          #  args: "--target i686-pc-windows-msvc"
     environment: Release
     runs-on: ${{ matrix.platform }}
     steps:
@@ -139,6 +139,7 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.PK_RELEASE_PASS }}
         with:
           releaseId: ${{ needs.create-release.outputs.release_id }}
+          args: ${{ matrix.args }}
 
   publish-release:
     permissions:
@@ -189,7 +190,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GIST_SECRET }}
           GIST_ID: ${{ vars.GIST_ID }}
           GIST_FILENAME: ${{ vars.GIST_FILENAME }}
-          JSON_CONTENT: ${{ fromJson(steps.json_file.outputs.downloaded_files)[0] }}
+          JSON_CONTENT: $(cat ${{ fromJson(steps.json_file.outputs.downloaded_files)[0] }})
         with:
           action: "update"
           gist_id: ${{ env.GIST_ID }}
