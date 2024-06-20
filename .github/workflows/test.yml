@@ -20,7 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIST_SECRET }}
           GIST_ID: ${{ vars.GIST_ID }}
-          GIST_FILENAME: ${{ vars.GIST_ID }}
+          GIST_FILENAME: ${{ vars.GIST_FILENAME }}
         with:
           action: "get"
           gist_id: $GIST_ID
