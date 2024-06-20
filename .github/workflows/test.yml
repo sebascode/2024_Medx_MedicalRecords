@@ -52,7 +52,7 @@ jobs:
         with:
           action: "get"
           gist_id: "fbccc6afca03e7ab1c0f7548c79179a5"
-          file_name: "meta.json"
+          file_name: "medx_release.json"
 
       - name: Change content
         id: new_gist
