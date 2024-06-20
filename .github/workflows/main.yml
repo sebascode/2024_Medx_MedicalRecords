@@ -91,7 +91,7 @@ jobs:
       matrix:
         #platform: [windows-latest, macos-latest]
         platform: [macos-latest]
-
+    environment: Release
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout repository
