@@ -29,13 +29,13 @@ jobs:
             "files": {
               "medx_release.json": {
                 "content": "{
-                  "version": "v0.0.0",
-                  "notes": "nulleable",
-                  "pub_date": "2020-06-20T08:10:26.882Z",
-                  "platforms": {
-                    "darwin-aarch64": {
-                      "signature": "",
-                      "url": "lero lero"
+                  \"version\": \"v0.0.0\",
+                  \"notes\": \"nulleable\",
+                  \"pub_date\": \"2020-06-20T08:10:26.882Z\",
+                  \"platforms\": {
+                    \"darwin-aarch64\": {
+                      \"signature\": \"\",
+                      \"url\": \"lero lero\"
                     }
                   }
                 }"
