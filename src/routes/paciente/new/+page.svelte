@@ -31,6 +31,7 @@
     async function submit(e: Event) {
         const formEl = e.target as HTMLFormElement;
         const db: Database = await Database.load("sqlite:medx_collection.db");
+        console.log({ obj });
         const { result, message } = obj.isValid;
         if (!result) {
             await mensajeria(message, {
@@ -81,11 +82,11 @@
             <label for="txt_{field}" style="text-transform: capitalize;"
                 >{field.replace("_", " ")}</label
             >
-            {#if field.includes("fecha")}
+            {#if field == "fecha_nacimiento"}
                 <Input
                     type="date"
                     required={field === "fecha_nacimiento"}
-                    id="txt_{field}"
+                    id="txt_fecha_nacimiento"
                     bind:value={obj["fecha_nacimientoStr"]}
                 />
             {:else}
