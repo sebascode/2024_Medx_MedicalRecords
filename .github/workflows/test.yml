@@ -48,7 +48,7 @@ jobs:
         id: gist_content
         uses: gorgbus/gist-actions@main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: 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
         with:
           action: "get"
           gist_id: "fbccc6afca03e7ab1c0f7548c79179a5"
@@ -65,7 +65,7 @@ jobs:
       - name: Update gist
         uses: gorgbus/gist-actions@main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: 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
         with:
           action: "update"
           gist_id: "fbccc6afca03e7ab1c0f7548c79179a5"
