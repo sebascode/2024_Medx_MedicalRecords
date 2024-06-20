@@ -1,12 +1,21 @@
 {
   "productName": "medx-medical_records",
-  "version": "0.0.0",
+  "version": "0.5.1",
   "identifier": "com.scode.medx",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
     "beforeBuildCommand": "pnpm build",
     "frontendDist": "../build"
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://gist.githubusercontent.com/sebascode/fbccc6afca03e7ab1c0f7548c79179a5/raw/medx_release.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDVDOTEyNzZCRkYzNjc1OUMKUldTY2RUYi9heWVSWEZ0UGYyNEdGREpoRmF3OHBLMDRSMDZibU1NbGJkVUIxZC9SWlZnYk9yc2cK",
+      "dialog": true
+    }
   },
   "app": {
     "windows": [
