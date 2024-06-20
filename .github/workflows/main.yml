@@ -167,31 +167,17 @@ jobs:
             })
 
   publish-gist:
-    if: false
     permissions:
       contents: write
     runs-on: ubuntu-20.04
     needs: [publish-release]
     steps:
-      - name: Get File
-        id: get_file
-        run: |
-          FILE_CONTENT<<EOF
-          {
-            "version": "0.5.1",
-            "notes": "",
-            "pub_date": "2024-06-20T08:10:26.882Z",
-            "platforms": {
-              "darwin-aarch64": {
-                "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTY2RUYi9heWVSWEFuVzhYQnZEME0yT3pTcG9GK1ZNZnc5Y0RIYmhLMndXblhRNlg0bVNIMStkbFA3SmhWejYwRkJSTDdvL0JKM2lMTWw0UHNBOE5sTFBYT3NWL1hlRkEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzE4ODcxMDIyCWZpbGU6bWVkeC1tZWRpY2FsX3JlY29yZHMuYXBwLnRhci5nego0bStjMzFwSlJrK2ZiTmNjc2xuM3Npc2x6U1BDNTJoNWNlUFZxYlVnVU4rZXZqK0hrQyszL3MxZVAybDk0eWVJVG9mMjdEcWEwOG1MSlRqU0xUSXlBdz09Cg==",
-                "url": "https://github.com/sebascode/2024_Medx_MedicalRecords/releases/latest/download/medx-medical_records_aarch64.app.tar.gz"
-              }
-            }
-          }
-          EOF
-
-          echo "::set-output name=json_content::$FILE_CONTENT"
-          echo "File content: $FILE_CONTENT"
+      - name: Download latest file
+        id: json_file
+        uses: robinraju/release-downloader@v1.10
+        with:
+          latest: true
+          fileName: "latest.json"
 
       - name: Update gist
         uses: gorgbus/gist-actions@main
@@ -199,12 +185,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GIST_SECRET }}
           GIST_ID: ${{ vars.GIST_ID }}
           GIST_FILENAME: ${{ vars.GIST_FILENAME }}
-          JSON_CONTENT: ${{ steps.get_file.outputs.json_content }}
+          JSON_CONTENT: ${{ fromJson(steps.json_file.outputs.downloaded_files)[0] }}
         with:
           action: "update"
           gist_id: ${{ env.GIST_ID }}
           file_name: ${{ env.GIST_FILENAME }}
-          content: ${{ steps.get_file.outputs.content }}
+          content: ${{ env.JSON_CONTENT }}
 
   delete-release-on-fail:
     permissions:
