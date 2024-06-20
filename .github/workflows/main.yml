@@ -163,10 +163,13 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-20.04
-    if: failure()
+    needs: [create-release, build-tauri, publish-release]
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
     steps:
       - name: Delete release if build failed
         uses: actions/github-script@v7
+        env:
+          release_id: ${{ needs.create-release.outputs.release_id }}
         with:
           script: |
             github.rest.repos.deleteRelease({

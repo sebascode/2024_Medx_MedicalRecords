@@ -1,0 +1,25 @@
+name: "test-demo"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-gist:
+    permissions:
+      contents: write
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Update Gist
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.gists.update({
+              gist_id: 'fbccc6afca03e7ab1c0f7548c79179a5',
+              files: {
+                'version': {
+                  content: 'hola'
+                }
+              }
+            })
