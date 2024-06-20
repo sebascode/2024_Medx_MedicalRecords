@@ -43,3 +43,31 @@ jobs:
             }
           }
           EOF
+
+      - name: Read gist
+        id: gist_content
+        uses: gorgbus/gist-actions@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          action: "get"
+          gist_id: "fbccc6afca03e7ab1c0f7548c79179a5"
+          file_name: "meta.json"
+
+      - name: Change content
+        id: new_gist
+        uses: gorgbus/edit-json-string@main
+        with:
+          json_string: ${{ steps.gist_content.outputs.content }}
+          field: "version"
+          value: "1.1.1"
+
+      - name: Update gist
+        uses: gorgbus/gist-actions@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          action: "update"
+          gist_id: "fbccc6afca03e7ab1c0f7548c79179a5"
+          file_name: "medx_release.json"
+          content: ${{ steps.new_gist.outputs.content }}
