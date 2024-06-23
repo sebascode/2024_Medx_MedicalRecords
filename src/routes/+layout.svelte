@@ -10,6 +10,8 @@
     import { relaunch } from "@tauri-apps/plugin-process";
     import { version } from "$lib/stores/global";
     import { dbGlobal } from "$lib/stores/dbStore";
+    import { listen } from "@tauri-apps/api/event";
+    import { ask, message } from "@tauri-apps/plugin-dialog";
 
     //version
     let currentVersion = "";
@@ -31,13 +33,24 @@
         console.log("check update");
         await check().then(async (update) => {
             console.log({ update });
+
             if (update?.available) {
-                await update
-                    .download()
-                    .then(async (x) => {
-                        await relaunch().catch(console.error);
-                    })
-                    .catch(console.error);
+                ask(
+                    `Hay una nueva versión disponible.\nVersión actual: ${currentVersion} \nVersión disponible: ${update?.version}\n\n¿Desea actualizar?`,
+                    {
+                        title: "Nueva actualización disponible",
+                        kind: "info",
+                    },
+                ).then(async (ev) => {
+                    await update
+                        .downloadAndInstall()
+                        .then(async (x) => {
+                            await relaunch().catch(console.error);
+                        })
+                        .catch((err) => {
+                            console.log({ err });
+                        });
+                });
             }
         });
     }

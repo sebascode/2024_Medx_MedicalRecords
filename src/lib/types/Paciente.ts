@@ -54,7 +54,6 @@ export class Paciente implements IPaciente {
 
   private _edad: number = 0;
   private edad() {
-    console.log("entró a edad");
     if (this._edad != 0) return this._edad;
     const today = new Date();
     let age = today.getFullYear() - this.fecha_nacimiento.getFullYear();
