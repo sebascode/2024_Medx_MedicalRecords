@@ -1,6 +1,6 @@
 {
   "productName": "medx-medical_records",
-  "version": "0.5.2",
+  "version": "0.5.1",
   "identifier": "com.scode.medx",
   "build": {
     "beforeDevCommand": "pnpm dev",
@@ -10,6 +10,8 @@
   },
   "plugins": {
     "updater": {
+      "active": true,
+      "createUpdaterArtifacts": true,
       "endpoints": [
         "https://gist.githubusercontent.com/sebascode/fbccc6afca03e7ab1c0f7548c79179a5/raw/medx_release.json"
       ],

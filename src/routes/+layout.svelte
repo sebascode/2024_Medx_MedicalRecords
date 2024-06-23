@@ -5,6 +5,43 @@
     import Moon from "$lib/icons/Moon.svelte";
     import { ModeWatcher, toggleMode } from "mode-watcher";
     import { Button } from "$lib/components/ui/button/index.js";
+    import { getVersion } from "@tauri-apps/api/app";
+    import { check } from "@tauri-apps/plugin-updater";
+    import { relaunch } from "@tauri-apps/plugin-process";
+    import { version } from "$lib/stores/global";
+    import { dbGlobal } from "$lib/stores/dbStore";
+
+    //version
+    let currentVersion = "";
+    version.subscribe((value: string) => {
+        currentVersion = value;
+    });
+    getVersion().then((v) => {
+        version.set(v);
+    });
+
+    // db
+    let db;
+    dbGlobal.subscribe((value) => {
+        db = value;
+    });
+
+    // init for version checking
+    async function Init() {
+        console.log("check update");
+        await check().then(async (update) => {
+            console.log({ update });
+            if (update?.available) {
+                await update
+                    .download()
+                    .then(async (x) => {
+                        await relaunch().catch(console.error);
+                    })
+                    .catch(console.error);
+            }
+        });
+    }
+    Init();
 </script>
 
 <ModeWatcher />
@@ -37,3 +74,15 @@
     <br />
     <slot />
 </div>
+
+<div class="footer">
+    v{currentVersion}
+</div>
+
+<style>
+    .footer {
+        position: fixed;
+        right: 10px;
+        bottom: 10px;
+    }
+</style>

@@ -79,6 +79,10 @@ export class Paciente implements IPaciente {
     this.fecha_nacimiento = new Date(fecha);
   }
 
+  get nombreCompleto(): string {
+    return `${this.nombre} ${this.apellido}`;
+  }
+
   public get isValid(): Valid {
     let field;
     const minLetters = 3;
