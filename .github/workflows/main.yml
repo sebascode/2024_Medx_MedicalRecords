@@ -184,25 +184,18 @@ jobs:
           latest: true
           fileName: "latest.json"
 
-      - name: Read file content
-        id: read_json
-        run: |
-          JSON_CONTENT=$(cat ${{ fromJson(steps.json_file.outputs.downloaded_files)[0] }})
-          echo $JSON_CONTENT;
-          echo "::set-output name=json_content::$JSON_CONTENT"
-
       - name: Update gist
         uses: gorgbus/gist-actions@main
         env:
           GITHUB_TOKEN: ${{ secrets.GIST_SECRET }}
           GIST_ID: ${{ vars.GIST_ID }}
           GIST_FILENAME: ${{ vars.GIST_FILENAME }}
-          JSON_CONTENT: ${{ steps.read_json.outputs.json_content }}
+          JSON_CONTENT: ${{ fromJson(steps.json_file.outputs.downloaded_files)[0] }}
         with:
           action: "update"
           gist_id: ${{ env.GIST_ID }}
           file_name: ${{ env.GIST_FILENAME }}
-          content: ${{ env.JSON_CONTENT }}
+          content: $(cat $JSON_CONTENT)
 
   delete-release-on-fail:
     permissions:
