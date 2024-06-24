@@ -1,6 +1,6 @@
 {
   "productName": "medx-medical_records",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "identifier": "com.scode.medx",
   "build": {
     "beforeDevCommand": "pnpm dev",
