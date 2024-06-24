@@ -184,13 +184,19 @@ jobs:
           latest: true
           fileName: "latest.json"
 
+      - name: Read file content
+        id: read_json
+        run: |
+          JSON_CONTENT=$(cat ${{ fromJson(steps.json_file.outputs.downloaded_files)[0] }})
+          echo "json_content=$JSON_CONTENT" >> $GITHUB_ENV
+
       - name: Update gist
         uses: gorgbus/gist-actions@main
         env:
           GITHUB_TOKEN: ${{ secrets.GIST_SECRET }}
           GIST_ID: ${{ vars.GIST_ID }}
           GIST_FILENAME: ${{ vars.GIST_FILENAME }}
-          JSON_CONTENT: $(cat ${{ fromJson(steps.json_file.outputs.downloaded_files)[0] }})
+          JSON_CONTENT: ${{ env.json_content }}
         with:
           action: "update"
           gist_id: ${{ env.GIST_ID }}
